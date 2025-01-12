@@ -22,6 +22,9 @@ public class DynamicBeat extends JFrame {
 		
 		//image파일에서 인트로이미지를 불러옴
 		introBackground = new ImageIcon(Main.class.getResource("../images/introBackground.jpg")).getImage();
+	
+		Music introMusic = new Music("introMusic.mp3", true);
+		introMusic.start();
 	}
 	
 	public void paint(Graphics g) {
