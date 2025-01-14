@@ -18,14 +18,24 @@ public class DynamicBeat extends JFrame {
 	private Image screenImage; 
 	private Graphics screenGraphic;
 	
-	//배경과 메뉴바
-	private Image introBackground = new ImageIcon(Main.class.getResource("../images/introBackground.jpg")).getImage(); //인트로 화면
-	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/menuBar.png")));
-	
 	//종료버튼
 	private ImageIcon exitButtonBasicImage = new ImageIcon(Main.class.getResource("../images/exitButtonBasic.png")); //기본 이미지
 	private ImageIcon exitButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/exitButtonEntered.png")); //누른상태
 	private JButton exitButton = new JButton(exitButtonBasicImage);
+	
+	//시작버튼
+	private ImageIcon startButtonBasicImage = new ImageIcon(Main.class.getResource("../images/startButtonBasic.png")); //기본 이미지
+	private ImageIcon startButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/startButtonEntered.png")); //누른 상태	
+	private JButton startButton = new JButton(startButtonBasicImage);
+	
+	//나가기버튼
+	private ImageIcon quitButtonBasicImage = new ImageIcon(Main.class.getResource("../images/quitButtonBasic.png")); //기본 이미지
+	private ImageIcon quitButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/quitButtonEntered.png")); //누른 상태	
+	private JButton quitButton = new JButton(quitButtonBasicImage);
+	
+	//배경과 메뉴바
+	private Image Background = new ImageIcon(Main.class.getResource("../images/introBackground.jpg")).getImage(); //인트로 화면
+	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/menuBar.png")));
 	
 	//마우스 위치
 	private int mouseX, mouseY;
@@ -66,7 +76,7 @@ public class DynamicBeat extends JFrame {
 				Music buttonEnteredMusic = new Music("PianoC.mp3", false); //한번만 효과음 재생
 				buttonEnteredMusic.start();
 				try { //음악이 재생되고 종료
-					Thread.sleep(2000); //바로 종료되는 것을 방지(1초 정도 후 종료)
+					Thread.sleep(1000); //바로 종료되는 것을 방지(1초 정도 후 종료)
 				} catch (InterruptedException ex) {
 					ex.printStackTrace();
 				}
@@ -74,6 +84,72 @@ public class DynamicBeat extends JFrame {
 			}
 		});
 		add(exitButton);
+		
+		//----------------------시작 버튼-----------------------------------
+		startButton.setBounds(0, 300, 400, 100); //퇴장버튼
+		startButton.setBorderPainted(false); //기존의 사각형이 아닌 이미지의 형태 따옴
+		startButton.setContentAreaFilled(false);
+		startButton.setFocusPainted(false);
+		startButton.addMouseListener(new MouseAdapter() { //퇴장 이벤트 리스너
+			@Override
+			public void mouseEntered(MouseEvent e) { //마우스가 올라갔을 때
+				startButton.setIcon(startButtonEnteredImage);
+				startButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); //손가락모양
+				Music buttonEnteredMusic = new Music("PianoE.mp3", false); //한번만 효과음 재생
+				buttonEnteredMusic.start();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) { //마우스가 내려갔을 때 
+				startButton.setIcon(startButtonBasicImage);
+				startButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); //기본마우스
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) { //마우스를 눌렀을 때
+				Music buttonEnteredMusic = new Music("PianoC.mp3", false); //한번만 효과음 재생
+				buttonEnteredMusic.start();
+				//게임 시작 이벤트
+				startButton.setVisible(false);
+				quitButton.setVisible(false);
+				Background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage(); //인트로 화면
+			}
+		});
+		add(startButton);
+		
+		//----------------------나가기 버튼-----------------------------------
+		quitButton.setBounds(0, 430, 400, 100); //퇴장버튼
+		quitButton.setBorderPainted(false); //기존의 사각형이 아닌 이미지의 형태 따옴
+		quitButton.setContentAreaFilled(false);
+		quitButton.setFocusPainted(false);
+		quitButton.addMouseListener(new MouseAdapter() { //퇴장 이벤트 리스너
+			@Override
+			public void mouseEntered(MouseEvent e) { //마우스가 올라갔을 때
+				quitButton.setIcon(quitButtonEnteredImage);
+				quitButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); //손가락모양
+				Music buttonEnteredMusic = new Music("PianoE.mp3", false); //한번만 효과음 재생
+				buttonEnteredMusic.start();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) { //마우스가 내려갔을 때 
+				quitButton.setIcon(quitButtonBasicImage);
+				quitButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); //기본마우스
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) { //마우스를 눌렀을 때
+				Music buttonEnteredMusic = new Music("PianoC.mp3", false); //한번만 효과음 재생
+				buttonEnteredMusic.start();
+				try { //음악이 재생되고 종료
+					Thread.sleep(1000); //바로 종료되는 것을 방지(1초 정도 후 종료)
+				} catch (InterruptedException ex) {
+					ex.printStackTrace();
+				}
+				System.exit(0); //프로그램 종료
+			}
+		});
+		add(quitButton);
 		
 		//-----------------------메뉴 바------------------------------------
 		menuBar.setBounds(0, 0, 1280, 30); //위치와 크기
@@ -108,7 +184,7 @@ public class DynamicBeat extends JFrame {
 	}
 	
 	public void screenDraw(Graphics g) {
-		g.drawImage(introBackground, 0, 0, null);
+		g.drawImage(Background, 0, 0, null);
 		paintComponents(g);
 		this.repaint();
 	}
