@@ -34,8 +34,24 @@ public class DynamicBeat extends JFrame {
 	private JButton quitButton = new JButton(quitButtonBasicImage);
 	
 	//배경과 메뉴바
-	private Image Background = new ImageIcon(Main.class.getResource("../images/introBackground.jpg")).getImage(); //인트로 화면
+	private Image Background = new ImageIcon(Main.class.getResource("../images/introBackground.jpg")).getImage(); //배경화면
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/menuBar.png")));
+	
+	//곡 선택 이미지
+	private Image selectedImage = new ImageIcon(Main.class.getResource("../images/Route201 Game Start Image.png")).getImage(); //선택 화면
+	private boolean isMainScreen = false; //선택화면 환성화 변수
+	
+	//곡 제목 이미지
+	private Image titleImage = new ImageIcon(Main.class.getResource("../images/Route201 Title Image.png")).getImage();
+	
+	//곡 넘기기 버튼 (왼, 오)
+	private ImageIcon leftButtonBasicImage = new ImageIcon(Main.class.getResource("../images/leftButtonBasic.png")); //기본 이미지
+	private ImageIcon leftButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/leftButtonEntered.png")); //누른 상태	
+	private JButton leftButton = new JButton(leftButtonBasicImage);
+	
+	private ImageIcon rightButtonBasicImage = new ImageIcon(Main.class.getResource("../images/rightButtonBasic.png")); //기본 이미지
+	private ImageIcon rightButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/rightButtonEntered.png")); //누른 상태	
+	private JButton rightButton = new JButton(rightButtonBasicImage);
 	
 	//마우스 위치
 	private int mouseX, mouseY;
@@ -113,6 +129,9 @@ public class DynamicBeat extends JFrame {
 				startButton.setVisible(false);
 				quitButton.setVisible(false);
 				Background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage(); //인트로 화면
+				leftButton.setVisible(true);
+				rightButton.setVisible(true);
+				isMainScreen = true; //시작버튼 클릭시 변경할 선택화면 변수 활성화해줌
 			}
 		});
 		add(startButton);
@@ -172,6 +191,68 @@ public class DynamicBeat extends JFrame {
 		});
 		add(menuBar);
 		
+		//----------------------왼쪽 버튼-----------------------------------
+		leftButton.setVisible(false);
+		leftButton.setBounds(140, 310, 60, 60); //퇴장버튼
+		leftButton.setBorderPainted(false); //기존의 사각형이 아닌 이미지의 형태 따옴
+		leftButton.setContentAreaFilled(false);
+		leftButton.setFocusPainted(false);
+		leftButton.addMouseListener(new MouseAdapter() { //퇴장 이벤트 리스너
+			@Override
+			public void mouseEntered(MouseEvent e) { //마우스가 올라갔을 때
+				leftButton.setIcon(leftButtonEnteredImage);
+				leftButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); //손가락모양
+				Music buttonEnteredMusic = new Music("PianoE.mp3", false); //한번만 효과음 재생
+				buttonEnteredMusic.start();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) { //마우스가 내려갔을 때 
+				leftButton.setIcon(leftButtonBasicImage);
+				leftButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); //기본마우스
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) { //마우스를 눌렀을 때
+				Music buttonEnteredMusic = new Music("PianoC.mp3", false); //한번만 효과음 재생
+				buttonEnteredMusic.start();
+				// 왼쪽 버튼 이벤트
+				
+			}
+		});
+		add(leftButton);
+		
+		//----------------------오른쪽 버튼-----------------------------------
+		rightButton.setVisible(false);
+		rightButton.setBounds(1080, 310, 60, 60); //퇴장버튼
+		rightButton.setBorderPainted(false); //기존의 사각형이 아닌 이미지의 형태 따옴
+		rightButton.setContentAreaFilled(false);
+		rightButton.setFocusPainted(false);
+		rightButton.addMouseListener(new MouseAdapter() { //퇴장 이벤트 리스너
+			@Override
+			public void mouseEntered(MouseEvent e) { //마우스가 올라갔을 때
+				rightButton.setIcon(rightButtonEnteredImage);
+				rightButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); //손가락모양
+				Music buttonEnteredMusic = new Music("PianoE.mp3", false); //한번만 효과음 재생
+				buttonEnteredMusic.start();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) { //마우스가 내려갔을 때 
+				rightButton.setIcon(rightButtonBasicImage);
+				rightButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); //기본마우스
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) { //마우스를 눌렀을 때
+				Music buttonEnteredMusic = new Music("PianoC.mp3", false); //한번만 효과음 재생
+				buttonEnteredMusic.start();
+				// 오른쪽 버튼 이벤트
+				
+			}
+		});
+		add(rightButton);
+		
 		Music introMusic = new Music("introMusic.mp3", true);
 		introMusic.start();
 	}
@@ -185,6 +266,11 @@ public class DynamicBeat extends JFrame {
 	
 	public void screenDraw(Graphics g) {
 		g.drawImage(Background, 0, 0, null);
+		if(isMainScreen) 
+		{
+			g.drawImage(selectedImage, 340, 100, null); //선택화면
+			g.drawImage(titleImage, 340, 50, null);
+		}
 		paintComponents(g);
 		this.repaint();
 	}
