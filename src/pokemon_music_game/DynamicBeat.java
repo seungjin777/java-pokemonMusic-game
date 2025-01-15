@@ -38,7 +38,7 @@ public class DynamicBeat extends JFrame {
 	private JButton quitButton = new JButton(quitButtonBasicImage);
 	
 	//배경과 메뉴바
-	private Image Background = new ImageIcon(Main.class.getResource("../images/introBackground.jpg")).getImage(); //배경화면
+	private Image background = new ImageIcon(Main.class.getResource("../images/introBackground.jpg")).getImage(); //배경화면
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/menuBar.png")));
 	
 	//곡 선택 이미지
@@ -158,7 +158,7 @@ public class DynamicBeat extends JFrame {
 				//게임 시작 이벤트
 				startButton.setVisible(false);
 				quitButton.setVisible(false);
-				Background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage(); //인트로 화면
+				background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage(); //인트로 화면
 				leftButton.setVisible(true);
 				rightButton.setVisible(true);
 				easyButton.setVisible(true);
@@ -308,8 +308,7 @@ public class DynamicBeat extends JFrame {
 			public void mousePressed(MouseEvent e) { //마우스를 눌렀을 때
 				Music buttonEnteredMusic = new Music("PianoC.mp3", false); //한번만 효과음 재생
 				buttonEnteredMusic.start();
-				// 난이도 쉬움 이벤트
-				
+				gameStart(nowSelected, "easy"); // 난이도 쉬움 이벤트	
 			}
 		});
 		add(easyButton);
@@ -339,8 +338,7 @@ public class DynamicBeat extends JFrame {
 			public void mousePressed(MouseEvent e) { //마우스를 눌렀을 때
 				Music buttonEnteredMusic = new Music("PianoC.mp3", false); //한번만 효과음 재생
 				buttonEnteredMusic.start();
-				// 난이도 어려움 이벤트
-				
+				gameStart(nowSelected, "hard"); // 난이도 어려움 이벤트	
 			}
 		});
 		add(hardButton);
@@ -354,7 +352,7 @@ public class DynamicBeat extends JFrame {
 	}
 	
 	public void screenDraw(Graphics g) {
-		g.drawImage(Background, 0, 0, null);
+		g.drawImage(background, 0, 0, null);
 		if(isMainScreen) 
 		{
 			g.drawImage(selectedImage, 340, 100, null); //선택화면
@@ -387,5 +385,16 @@ public class DynamicBeat extends JFrame {
 		else
 			nowSelected++;
 		selectTrack(nowSelected);
+	}
+	
+	public void gameStart(int nowSelected, String difficulty) {
+		if(selectedMusic != null)
+			selectedMusic.close();
+		isMainScreen = false; //이제는 메인화면이 아님
+		leftButton.setVisible(false);
+		rightButton.setVisible(false);
+		easyButton.setVisible(false);
+		hardButton.setVisible(false);	
+		background = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getGameImage())).getImage();
 	}
 }
