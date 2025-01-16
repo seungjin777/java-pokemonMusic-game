@@ -70,7 +70,14 @@ public class DynamicBeat extends JFrame {
 	private ImageIcon hardButtonBasicImage = new ImageIcon(Main.class.getResource("../images/hardButtonBasic.png")); //기본 이미지
 	private ImageIcon hardButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/hardButtonEntered.png")); //누른 상태	
 	private JButton hardButton = new JButton(hardButtonBasicImage);
-
+	
+	//중간에 나가기 버튼
+	private ImageIcon backButtonBasicImage = new ImageIcon(Main.class.getResource("../images/backButtonBasic.png")); //기본 이미지
+	private ImageIcon backButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/backButtonEntered.png")); //누른 이미지
+	private JButton backButton = new JButton(backButtonBasicImage);
+	
+	//인트로 음악 변수
+	private Music introMusic = new Music("introMusic.mp3", true);
 	
 	public DynamicBeat() {
 		setUndecorated(true);
@@ -84,9 +91,8 @@ public class DynamicBeat extends JFrame {
 		setLayout(null);
 		
 		//--------------------------시작화면 노래------------------------------
-		Music introMusic = new Music("introMusic.mp3", true);
 		introMusic.start();
-		
+		//트랙에 노래 정보 담기
 		trackList.add(new Track("Route201 Title Image.png", "Route201 Game Start Image.png",
 				"Route201 Game Image.png", "Route - 201.mp3", "Route - 201.mp3")); //트랙 1
 		trackList.add(new Track("Route209 Title Image.png", "Route209 Game Start Image.png",
@@ -153,17 +159,7 @@ public class DynamicBeat extends JFrame {
 				Music buttonEnteredMusic = new Music("PianoC.mp3", false); //한번만 효과음 재생
 				buttonEnteredMusic.start();
 				introMusic.close(); //인트로 음악 끔
-				selectTrack(0); //젤 처음 트랙
-				
-				//게임 시작 이벤트
-				startButton.setVisible(false);
-				quitButton.setVisible(false);
-				background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage(); //인트로 화면
-				leftButton.setVisible(true);
-				rightButton.setVisible(true);
-				easyButton.setVisible(true);
-				hardButton.setVisible(true);
-				isMainScreen = true; //시작버튼 클릭시 변경할 선택화면 변수 활성화해줌
+				enterMain(); //게임 시작 이벤트
 			}
 		});
 		add(startButton);
@@ -342,6 +338,36 @@ public class DynamicBeat extends JFrame {
 			}
 		});
 		add(hardButton);
+		
+		//----------------------나가기 버튼-----------------------------------
+				backButton.setVisible(false);
+				backButton.setBounds(20, 50, 60, 60); //퇴장버튼
+				backButton.setBorderPainted(false); //기존의 사각형이 아닌 이미지의 형태 따옴
+				backButton.setContentAreaFilled(false);
+				backButton.setFocusPainted(false);
+				backButton.addMouseListener(new MouseAdapter() { //퇴장 이벤트 리스너
+					@Override
+					public void mouseEntered(MouseEvent e) { //마우스가 올라갔을 때
+						backButton.setIcon(backButtonEnteredImage);
+						backButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); //손가락모양
+						Music buttonEnteredMusic = new Music("PianoE.mp3", false); //한번만 효과음 재생
+						buttonEnteredMusic.start();
+					}
+					
+					@Override
+					public void mouseExited(MouseEvent e) { //마우스가 내려갔을 때 
+						backButton.setIcon(backButtonBasicImage);
+						backButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); //기본마우스
+					}
+					
+					@Override
+					public void mousePressed(MouseEvent e) { //마우스를 눌렀을 때
+						Music buttonEnteredMusic = new Music("PianoC.mp3", false); //한번만 효과음 재생
+						buttonEnteredMusic.start();
+						backMain(); //메인으로 돌아가는 이벤트
+					}
+				});
+				add(backButton);
 	}
 	
 	public void paint(Graphics g) {
@@ -396,5 +422,31 @@ public class DynamicBeat extends JFrame {
 		easyButton.setVisible(false);
 		hardButton.setVisible(false);	
 		background = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getGameImage())).getImage();
+		backButton.setVisible(true);
+	}
+	
+	public void backMain() {
+		isMainScreen = true;
+		leftButton.setVisible(true);
+		rightButton.setVisible(true);
+		easyButton.setVisible(true);
+		hardButton.setVisible(true);
+		background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage();
+		backButton.setVisible(false);
+		selectTrack(nowSelected);
+		
+	}
+	
+	public void enterMain() {
+		startButton.setVisible(false);
+		quitButton.setVisible(false);
+		background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage(); //인트로 화면
+		isMainScreen = true; //시작버튼 클릭시 변경할 선택화면 변수 활성화해줌
+		leftButton.setVisible(true);
+		rightButton.setVisible(true);
+		easyButton.setVisible(true);
+		hardButton.setVisible(true);
+		introMusic.close();
+		selectTrack(0); //젤 처음 트랙
 	}
 }
