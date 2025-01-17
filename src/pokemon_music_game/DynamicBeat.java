@@ -86,7 +86,7 @@ public class DynamicBeat extends JFrame {
 	private boolean isGameScreen = false; 
 	
 	//게임 클래스 변수선언
-	public static Game game = new Game();
+	public static Game game;
 	
 	public DynamicBeat() {
 		setUndecorated(true);
@@ -105,11 +105,11 @@ public class DynamicBeat extends JFrame {
 		introMusic.start();
 		//트랙에 노래 정보 담기
 		trackList.add(new Track("Route201 Title Image.png", "Route201 Game Start Image.png",
-				"Route201 Game Image.png", "Route - 201.mp3", "Route - 201.mp3")); //트랙 1
+				"Route201 Game Image.png", "Route - 201.mp3", "Route - 201.mp3", "Route - 201")); //트랙 1
 		trackList.add(new Track("Route209 Title Image.png", "Route209 Game Start Image.png",
-				"Route209 Game Image.png", "Route - 209 8bit.mp3", "Route - 209 8bit.mp3")); //트랙 2
+				"Route209 Game Image.png", "Route - 209 8bit.mp3", "Route - 209 8bit.mp3", "Route - 209 8bit")); //트랙 2
 		trackList.add(new Track("Ending209 Title Image.png", "Route209 EndingVer Game Start Image.png",
-				"Route209 EndingVer Game Image.png", "Ending - 209.mp3", "Ending - 209.mp3")); //트랙 3
+				"Route209 EndingVer Game Image.png", "Ending - 209.mp3", "Ending - 209.mp3", "Ending - 209")); //트랙 3
 		
 		//------------------------종료 버튼-----------------------------------
 		exitButton.setBounds(1251, 1, 28, 28); //퇴장버튼
@@ -315,7 +315,7 @@ public class DynamicBeat extends JFrame {
 			public void mousePressed(MouseEvent e) { //마우스를 눌렀을 때
 				Music buttonEnteredMusic = new Music("PianoC.mp3", false); //한번만 효과음 재생
 				buttonEnteredMusic.start();
-				gameStart(nowSelected, "easy"); // 난이도 쉬움 이벤트	
+				gameStart(nowSelected, "Easy"); // 난이도 쉬움 이벤트	
 			}
 		});
 		add(easyButton);
@@ -345,7 +345,7 @@ public class DynamicBeat extends JFrame {
 			public void mousePressed(MouseEvent e) { //마우스를 눌렀을 때
 				Music buttonEnteredMusic = new Music("PianoC.mp3", false); //한번만 효과음 재생
 				buttonEnteredMusic.start();
-				gameStart(nowSelected, "hard"); // 난이도 어려움 이벤트	
+				gameStart(nowSelected, "Hard"); // 난이도 어려움 이벤트	
 			}
 		});
 		add(hardButton);
@@ -440,6 +440,7 @@ public class DynamicBeat extends JFrame {
 		backButton.setVisible(true);
 		isGameScreen = true;
 		setFocusable(true); //포커스 주기
+		game = new Game(trackList.get(nowSelected).getTitleName(), difficulty, trackList.get(nowSelected).getStartMusic());
 	}
 	
 	public void backMain() {
@@ -452,7 +453,8 @@ public class DynamicBeat extends JFrame {
 		backButton.setVisible(false);
 		selectTrack(nowSelected);
 		isGameScreen = false;
-		
+		game.close(); //게임 종료, 음악 종료
+		game = null;
 	}
 	
 	public void enterMain() {

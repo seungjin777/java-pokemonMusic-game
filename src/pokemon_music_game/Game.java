@@ -25,6 +25,20 @@ public class Game extends Thread {
 	private Image noteRouteKImage = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage(); //노트 경로 이미지
 	private Image noteRouteLImage = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage(); //노트 경로 이미지
 	
+	//게임 진행 관련 정보들
+ 	private String titleName; //곡 이름
+	private String difficulty; //난이도
+	private String musicTitle; //곡 제목
+	private Music gameMusic; //곡 담을 변수
+	
+	public Game(String titleName, String difficulty, String musicTitle) {
+		this.titleName = titleName;
+		this.difficulty = difficulty;
+		this.musicTitle = musicTitle;
+		gameMusic = new Music(this.musicTitle, false);
+		gameMusic.start();
+	}
+	
 	public void screenDraw(Graphics2D g) {
 		g.drawImage(noteRouteSImage, 228, 30, null);
 		g.drawImage(noteRouteDImage, 332, 30, null);
@@ -51,8 +65,8 @@ public class Game extends Thread {
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON); //폰트 화질 높이기
 		
 		g.setFont(new Font("Arial", Font.BOLD, 30));
-		g.drawString("Route - 201", 20, 702); //곡 제목 출력
-		g.drawString("Easy", 1190, 702); //곡 난이도 출력
+		g.drawString(titleName, 20, 702); //곡 제목 출력
+		g.drawString(difficulty, 1190, 702); //곡 난이도 출력
 		
 		g.setFont(new Font("Arial", Font.PLAIN, 26));
 		g.setColor(Color.DARK_GRAY);
@@ -129,6 +143,11 @@ public class Game extends Thread {
 	
 	@Override
 	public void run() {
-		
+	
+	}
+	
+	public void close() {
+		gameMusic.close();
+		this.interrupt();
 	}
 }
