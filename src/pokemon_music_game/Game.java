@@ -39,8 +39,6 @@ public class Game extends Thread {
 		this.difficulty = difficulty;
 		this.musicTitle = musicTitle;
 		gameMusic = new Music(this.musicTitle, false);
-		gameMusic.start();
-		dropNotes(titleName);
 	}
 	
 	public void screenDraw(Graphics2D g) {
@@ -155,7 +153,7 @@ public class Game extends Thread {
 	
 	@Override
 	public void run() {
-	
+		dropNotes();
 	}
 	
 	public void close() {
@@ -163,10 +161,104 @@ public class Game extends Thread {
 		this.interrupt();
 	}
 	
-	public void dropNotes(String titleName) {
-		//예시
-		Note note = new Note(228, "short");
-		note.start();
-		noteList.add(note);
+	public void dropNotes() {
+		Beat[] beats = null;
+		if(titleName.equals("Route - 201")) {
+			int startTime = 4000 - Main.REACH_TIME * 1000;
+			
+			int gap = 200;
+			beats = new Beat[] {
+					//2마디
+					new Beat(startTime + gap*0, "S"),
+					new Beat(startTime + gap*1, "F"),
+					new Beat(startTime + gap*2, "Space"),
+					
+					new Beat(startTime + gap*5, "L"),
+					new Beat(startTime + gap*6, "J"),
+					new Beat(startTime + gap*7, "Space"),
+					
+					//3마디
+					new Beat(startTime + gap*10, "S"),
+					new Beat(startTime + gap*11, "F"),
+					new Beat(startTime + gap*12, "Space"),
+					
+					new Beat(startTime + gap*15, "L"),
+					new Beat(startTime + gap*16, "J"),
+					new Beat(startTime + gap*17, "Space"),
+					
+					//4마디
+					new Beat(startTime + gap*20, "S"),
+					new Beat(startTime + gap*21, "F"),
+					new Beat(startTime + gap*22, "Space"),
+					
+					new Beat(startTime + gap*25, "L"),
+					new Beat(startTime + gap*26, "J"),
+					new Beat(startTime + gap*27, "Space"),
+					
+					//5마디
+					new Beat(startTime + gap*30, "S"),
+					new Beat(startTime + gap*31, "F"),
+					new Beat(startTime + gap*32, "Space"),
+					
+					new Beat(startTime + gap*35, "L"),
+					new Beat(startTime + gap*36, "J"),
+					new Beat(startTime + gap*37, "Space"), //start + 7400s
+					
+					//6마디
+					new Beat(startTime + 7700, "S"),
+					new Beat(startTime + 8200, "L"),
+					new Beat(startTime + 8700, "S"),
+					new Beat(startTime + 9200, "L"),
+					
+					//7마디 스킵
+					
+					//8마디
+					new Beat(startTime + 11700, "S"),
+					new Beat(startTime + 12200, "L"),
+					new Beat(startTime + 12700, "S"),
+					new Beat(startTime + 13200, "L"),
+					
+					//9마디 스킵
+					
+					//10마디
+					new Beat(startTime + 11700, "S"),
+					new Beat(startTime + 12200, "L"),
+					new Beat(startTime + 12700, "S"),
+					new Beat(startTime + 13200, "L"),
+					
+			};
+		}
+		else if(titleName.equals("Route - 209 8bit")) {
+			int startTime = 1000;
+			beats = new Beat[] {
+					new Beat(startTime, "Space"),
+			};
+		}
+		else if(titleName.equals("Ending - 209 8bit")) {
+			int startTime = 1000;
+			beats = new Beat[] {
+					new Beat(startTime, "Space"),
+			};
+		}
+			
+		int i = 0;
+		gameMusic.start();
+		while(i < beats.length && !isInterrupted()) {
+			boolean dropped = false;
+			if(beats[i].getTime() <= gameMusic.getTime()) {
+				Note note = new Note(beats[i].getNoteName());
+				note.start();
+				noteList.add(note);
+				i++;
+				dropped = true;
+			}
+			if(!dropped) {
+				try {
+					Thread.sleep(5);
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }

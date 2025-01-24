@@ -89,6 +89,16 @@ public class DynamicBeat extends JFrame {
 	public static Game game;
 	
 	public DynamicBeat() {
+		
+		//트랙에 노래 정보 담기
+		trackList.add(new Track("Route201 Title Image.png", "Route201 Game Start Image.png",
+				"Route201 Game Image.png", "Route - 201.mp3", "Route - 201.mp3", "Route - 201")); //트랙 1
+		trackList.add(new Track("Route209 Title Image.png", "Route209 Game Start Image.png",
+				"Route209 Game Image.png", "Route - 209 8bit.mp3", "Route - 209 8bit.mp3", "Route - 209 8bit")); //트랙 2
+		trackList.add(new Track("Ending209 Title Image.png", "Route209 EndingVer Game Start Image.png",
+				"Route209 EndingVer Game Image.png", "Ending - 209.mp3", "Ending - 209.mp3", "Ending - 209")); //트랙 3
+
+		
 		setUndecorated(true);
 		setTitle("PokemonMusic_Game");
 		setSize(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
@@ -103,14 +113,7 @@ public class DynamicBeat extends JFrame {
 		
 		//--------------------------시작화면 노래------------------------------
 		introMusic.start();
-		//트랙에 노래 정보 담기
-		trackList.add(new Track("Route201 Title Image.png", "Route201 Game Start Image.png",
-				"Route201 Game Image.png", "Route - 201.mp3", "Route - 201.mp3", "Route - 201")); //트랙 1
-		trackList.add(new Track("Route209 Title Image.png", "Route209 Game Start Image.png",
-				"Route209 Game Image.png", "Route - 209 8bit.mp3", "Route - 209 8bit.mp3", "Route - 209 8bit")); //트랙 2
-		trackList.add(new Track("Ending209 Title Image.png", "Route209 EndingVer Game Start Image.png",
-				"Route209 EndingVer Game Image.png", "Ending - 209.mp3", "Ending - 209.mp3", "Ending - 209")); //트랙 3
-		
+				
 		//------------------------종료 버튼-----------------------------------
 		exitButton.setBounds(1251, 1, 28, 28); //퇴장버튼
 		exitButton.setBorderPainted(false); //기존의 사각형이 아닌 이미지의 형태 따옴
@@ -400,6 +403,12 @@ public class DynamicBeat extends JFrame {
 			game.screenDraw(g);
 		}
 		paintComponents(g);
+		
+		try {
+			Thread.sleep(5);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.repaint();
 	}
 	
@@ -439,8 +448,9 @@ public class DynamicBeat extends JFrame {
 		background = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getGameImage())).getImage();
 		backButton.setVisible(true);
 		isGameScreen = true;
-		setFocusable(true); //포커스 주기
 		game = new Game(trackList.get(nowSelected).getTitleName(), difficulty, trackList.get(nowSelected).getStartMusic());
+		game.start();
+		setFocusable(true); //포커스 주기
 	}
 	
 	public void backMain() {
