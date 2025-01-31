@@ -14,6 +14,8 @@ public class Game extends Thread {
 	private Image noteRouteLineImage = new ImageIcon(Main.class.getResource("../images/noteRouteLine.png")).getImage(); //노트 경로 경계선 이미지
 	private Image judgementLineImage = new ImageIcon(Main.class.getResource("../images/judgementLine.png")).getImage(); //노트 판정 바
 	private Image gameInfoImage = new ImageIcon(Main.class.getResource("../images/gameInfo.png")).getImage(); //게임 정보 이미지
+	private Image blueFlareImage; 
+	private Image judgeImage;
 	
 	//노트 판정 판
 	private Image noteRouteSImage = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage(); //노트 경로 이미지
@@ -55,6 +57,9 @@ public class Game extends Thread {
 		//각 노트들의 위치 그려주기
 		for(int i = 0; i < noteList.size(); i++) {
 			Note note = noteList.get(i);
+			if(note.getY() > 620){
+				judgeImage = new ImageIcon(Main.class.getResource("../images/judgeMiss.png")).getImage();
+			}
 			if(!note.isProceeded()) {
 				noteList.remove(i);
 				i--;
@@ -96,6 +101,8 @@ public class Game extends Thread {
 		g.setColor(Color.LIGHT_GRAY);
 		g.setFont(new Font("Elephant", Font.BOLD, 30));
 		g.drawString("000000", 565, 702); //점수 출력
+		g.drawImage(blueFlareImage, 460, 410, null);
+		g.drawImage(judgeImage, 460, 370, null);
 	}
 	
 	public void pressS() {
@@ -393,9 +400,27 @@ public class Game extends Thread {
 		for(int i=0; i<noteList.size(); i++) {
 			Note note = noteList.get(i);
 			if(input.equals(note.getNoteType())) {
-				note.judge();
+				judgeEvent(note.judge());
 				break;
 			}
 		}
+	}
+	
+	public void judgeEvent(String judge) {
+		if(!judge.equals("None")){
+			blueFlareImage = new ImageIcon(Main.class.getResource("../images/blueFlare.png")).getImage();
+		}
+		if(judge.equals("Miss")) {
+			judgeImage = new ImageIcon(Main.class.getResource("../images/judgeMiss.png")).getImage();
+		}else if(judge.equals("Good")) {
+			judgeImage = new ImageIcon(Main.class.getResource("../images/judgeGood.png")).getImage();
+		}else if(judge.equals("Perfect")) {
+			judgeImage = new ImageIcon(Main.class.getResource("../images/judgePerfect.png")).getImage();
+		}else if(judge.equals("Early")) {
+			judgeImage = new ImageIcon(Main.class.getResource("../images/judgeEarly.png")).getImage();
+		}else if(judge.equals("Late")) {
+			judgeImage = new ImageIcon(Main.class.getResource("../images/judgeLate.png")).getImage();
+		}
+		
 	}
 }
