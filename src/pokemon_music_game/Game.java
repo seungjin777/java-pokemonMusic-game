@@ -55,7 +55,12 @@ public class Game extends Thread {
 		//각 노트들의 위치 그려주기
 		for(int i = 0; i < noteList.size(); i++) {
 			Note note = noteList.get(i);
-			note.screenDraw(g);
+			if(!note.isProceeded()) {
+				noteList.remove(i);
+				i--;
+			}else {
+				note.screenDraw(g);
+			}
 		}
 		
 		//노트 판정 라인 그려기
@@ -94,6 +99,7 @@ public class Game extends Thread {
 	}
 	
 	public void pressS() {
+		judge("S");
 		noteRouteSImage = new ImageIcon(Main.class.getResource("../images/notePressed.png")).getImage(); //눌렸을때 이미지로 변경
 		new Music("note.mp3", false).start();
 	}
@@ -102,6 +108,7 @@ public class Game extends Thread {
 	}
 	
 	public void pressD() {
+		judge("D");
 		noteRouteDImage = new ImageIcon(Main.class.getResource("../images/notePressed.png")).getImage(); //눌렸을때 이미지로 변경
 		new Music("note.mp3", false).start();
 	}
@@ -110,6 +117,7 @@ public class Game extends Thread {
 	}
 	
 	public void pressF() {
+		judge("F");
 		noteRouteFImage = new ImageIcon(Main.class.getResource("../images/notePressed.png")).getImage(); //눌렸을때 이미지로 변경
 		new Music("note.mp3", false).start();
 	}
@@ -118,6 +126,7 @@ public class Game extends Thread {
 	}
 	
 	public void pressSpace() {
+		judge("Space");
 		noteRouteSpace1Image = new ImageIcon(Main.class.getResource("../images/notePressed.png")).getImage(); //눌렸을때 이미지로 변경
 		noteRouteSpace2Image = new ImageIcon(Main.class.getResource("../images/notePressed.png")).getImage(); //눌렸을때 이미지로 변경
 		new Music("note.mp3", false).start();
@@ -128,6 +137,7 @@ public class Game extends Thread {
 	}
 	
 	public void pressJ() {
+		judge("J");
 		noteRouteJImage = new ImageIcon(Main.class.getResource("../images/notePressed.png")).getImage(); //눌렸을때 이미지로 변경
 		new Music("note.mp3", false).start();
 	}
@@ -136,6 +146,7 @@ public class Game extends Thread {
 	}
 	
 	public void pressK() {
+		judge("K");
 		noteRouteKImage = new ImageIcon(Main.class.getResource("../images/notePressed.png")).getImage(); //눌렸을때 이미지로 변경
 		new Music("note.mp3", false).start();
 	}
@@ -144,6 +155,7 @@ public class Game extends Thread {
 	}
 	
 	public void pressL() {
+		judge("L");
 		noteRouteLImage = new ImageIcon(Main.class.getResource("../images/notePressed.png")).getImage(); //눌렸을때 이미지로 변경
 		new Music("note.mp3", false).start();
 	}
@@ -153,7 +165,7 @@ public class Game extends Thread {
 	
 	@Override
 	public void run() {
-		dropNotes();
+		dropNotes(this.titleName);
 	}
 	
 	public void close() {
@@ -161,83 +173,198 @@ public class Game extends Thread {
 		this.interrupt();
 	}
 	
-	public void dropNotes() {
+	public void dropNotes(String titleName) {
 		Beat[] beats = null;
-		if(titleName.equals("Route - 201")) {
+		if(titleName.equals("Route - 201") && difficulty.equals("Easy")) {
 			int startTime = 4000 - Main.REACH_TIME * 1000;
 			
-			int gap = 200;
+			int repeat = 23500 + 4500; //도돌이표
 			beats = new Beat[] {
 					//2마디
-					new Beat(startTime + gap*0, "S"),
-					new Beat(startTime + gap*1, "F"),
-					new Beat(startTime + gap*2, "Space"),
+					new Beat(startTime + 0, "S"),
+					new Beat(startTime + 200, "F"),
+					new Beat(startTime + 400, "Space"),
 					
-					new Beat(startTime + gap*5, "L"),
-					new Beat(startTime + gap*6, "J"),
-					new Beat(startTime + gap*7, "Space"),
+					new Beat(startTime + 1000, "L"),
+					new Beat(startTime + 1200, "J"),
+					new Beat(startTime + 1400, "Space"),
 					
 					//3마디
-					new Beat(startTime + gap*10, "S"),
-					new Beat(startTime + gap*11, "F"),
-					new Beat(startTime + gap*12, "Space"),
+					new Beat(startTime + 2000, "S"),
+					new Beat(startTime + 2200, "F"),
+					new Beat(startTime + 2400, "Space"),
 					
-					new Beat(startTime + gap*15, "L"),
-					new Beat(startTime + gap*16, "J"),
-					new Beat(startTime + gap*17, "Space"),
+					new Beat(startTime + 3000, "L"),
+					new Beat(startTime + 3200, "J"),
+					new Beat(startTime + 3400, "Space"),
 					
 					//4마디
-					new Beat(startTime + gap*20, "S"),
-					new Beat(startTime + gap*21, "F"),
-					new Beat(startTime + gap*22, "Space"),
+					new Beat(startTime + 4000, "S"),
+					new Beat(startTime + 4200, "F"),
+					new Beat(startTime + 4400, "Space"),
 					
-					new Beat(startTime + gap*25, "L"),
-					new Beat(startTime + gap*26, "J"),
-					new Beat(startTime + gap*27, "Space"),
+					new Beat(startTime + 5000, "L"),
+					new Beat(startTime + 5200, "J"),
+					new Beat(startTime + 5400, "Space"),
 					
 					//5마디
-					new Beat(startTime + gap*30, "S"),
-					new Beat(startTime + gap*31, "F"),
-					new Beat(startTime + gap*32, "Space"),
+					new Beat(startTime + 6000, "S"),
+					new Beat(startTime + 6200, "F"),
+					new Beat(startTime + 6400, "Space"),
 					
-					new Beat(startTime + gap*35, "L"),
-					new Beat(startTime + gap*36, "J"),
-					new Beat(startTime + gap*37, "Space"), //start + 7400s
-					
+					new Beat(startTime + 7000, "L"),
+					new Beat(startTime + 7200, "J"),
+					new Beat(startTime + 7400, "Space"), //start + 7400s
+					//-------------------------------------------------------
 					//6마디
-					new Beat(startTime + 7700, "S"),
-					new Beat(startTime + 8200, "L"),
-					new Beat(startTime + 8700, "S"),
-					new Beat(startTime + 9200, "L"),
+					new Beat(startTime + 7800, "S"), //500 간격
+					new Beat(startTime + 8300, "L"),
+					new Beat(startTime + 8800, "S"),
+					new Beat(startTime + 9300, "L"),
 					
-					//7마디 스킵
+					//7마디 스킵 (2600)
 					
 					//8마디
-					new Beat(startTime + 11700, "S"),
-					new Beat(startTime + 12200, "L"),
-					new Beat(startTime + 12700, "S"),
-					new Beat(startTime + 13200, "L"),
+					new Beat(startTime + 11900, "S"), //500 간격
+					new Beat(startTime + 12400, "L"),
+					new Beat(startTime + 12900, "S"),
+					new Beat(startTime + 13400, "L"),
 					
-					//9마디 스킵
+					//9마디 스킵 (2600)
 					
 					//10마디
-					new Beat(startTime + 11700, "S"),
-					new Beat(startTime + 12200, "L"),
-					new Beat(startTime + 12700, "S"),
-					new Beat(startTime + 13200, "L"),
+					new Beat(startTime + 15700, "S"), //--빠아아바아바암 
+					new Beat(startTime + 16500, "D"), //800 간격
+					new Beat(startTime + 17300, "F"),
+							
+					//11마디  600 쉬고
+					new Beat(startTime + 17900, "L"), 
+					new Beat(startTime + 18400, "K"), //500 간격
+					new Beat(startTime + 18900, "J"),
+					new Beat(startTime + 19300, "Space"),
+					
+					//12마디 400 쉬고
+					new Beat(startTime + 19800, "S"), //--빠아아바아바암 
+					new Beat(startTime + 20600, "D"), //800 간격
+					new Beat(startTime + 21400, "F"),
+							
+					//13마디  600 쉬고
+					new Beat(startTime + 22000, "L"), 
+					new Beat(startTime + 22500, "K"), //500 간격
+					new Beat(startTime + 23000, "J"),
+					new Beat(startTime + 23400, "Space"),
+					
+					//---------도돌이표-------------------------------------------------------------//
+					
+					//2마디
+					new Beat(startTime + repeat + 0, "S"),
+					new Beat(startTime + repeat + 200, "F"),
+					new Beat(startTime + repeat + 400, "Space"),
+					
+					new Beat(startTime + repeat + 1000, "L"),
+					new Beat(startTime + repeat + 1200, "J"),
+					new Beat(startTime + repeat + 1400, "Space"),
+					
+					//3마디
+					new Beat(startTime + repeat + 2000, "S"),
+					new Beat(startTime + repeat + 2200, "F"),
+					new Beat(startTime + repeat + 2400, "Space"),
+					
+					new Beat(startTime + repeat + 3000, "L"),
+					new Beat(startTime + repeat + 3200, "J"),
+					new Beat(startTime + repeat + 3400, "Space"),
+					
+					//4마디
+					new Beat(startTime + repeat + 4000, "S"),
+					new Beat(startTime + repeat + 4200, "F"),
+					new Beat(startTime + repeat + 4400, "Space"),
+					
+					new Beat(startTime + repeat + 5000, "L"),
+					new Beat(startTime + repeat + 5200, "J"),
+					new Beat(startTime + repeat + 5400, "Space"),
+					
+					//5마디
+					new Beat(startTime + repeat + 6000, "S"),
+					new Beat(startTime + repeat + 6200, "F"),
+					new Beat(startTime + repeat + 6400, "Space"),
+					
+					new Beat(startTime + repeat + 7000, "L"),
+					new Beat(startTime + repeat + 7200, "J"),
+					new Beat(startTime + repeat + 7400, "Space"), //start + 7400s
+					//-------------------------------------------------------
+					//6마디
+					new Beat(startTime + repeat + 7800, "S"), //500 간격
+					new Beat(startTime + repeat + 8300, "L"),
+					new Beat(startTime + repeat + 8800, "S"),
+					new Beat(startTime + repeat + 9300, "L"),
+					
+					//7마디 스킵 (2600)
+					
+					//8마디
+					new Beat(startTime + repeat + 11900, "S"), //500 간격
+					new Beat(startTime + repeat + 12400, "L"),
+					new Beat(startTime + repeat + 12900, "S"),
+					new Beat(startTime + repeat + 13400, "L"),
+					
+					//9마디 스킵 (2600)
+					
+					//10마디
+					new Beat(startTime + repeat + 15700, "S"), //--빠아아바아바암 
+					new Beat(startTime + repeat + 16500, "D"), //800 간격
+					new Beat(startTime + repeat + 17300, "F"),
+							
+					//11마디  600 쉬고
+					new Beat(startTime + repeat + 17900, "L"), 
+					new Beat(startTime + repeat + 18400, "K"), //500 간격
+					new Beat(startTime + repeat + 18900, "J"),
+					new Beat(startTime + repeat + 19300, "Space"),
+					
+					//12마디 400 쉬고
+					new Beat(startTime + repeat + 19800, "S"), //--빠아아바아바암 
+					new Beat(startTime + repeat + 20600, "D"), //800 간격
+					new Beat(startTime + repeat + 21400, "F"),
+							
+					//13마디  600 쉬고
+					new Beat(startTime + repeat + 22000, "L"), 
+					new Beat(startTime + repeat + 22500, "K"), //500 간격
+					new Beat(startTime + repeat + 23000, "J"),
+					new Beat(startTime + repeat + 23400, "Space"),
 					
 			};
 		}
-		else if(titleName.equals("Route - 209 8bit")) {
+		else if(titleName.equals("Route - 201") && difficulty.equals("hard")) {
 			int startTime = 1000;
 			beats = new Beat[] {
 					new Beat(startTime, "Space"),
+					//---------- 너무 힘드렁 ㅋㅋ
 			};
 		}
-		else if(titleName.equals("Ending - 209 8bit")) {
+		else if(titleName.equals("Route - 209 8bit") && difficulty.equals("Easy")) {
 			int startTime = 1000;
 			beats = new Beat[] {
 					new Beat(startTime, "Space"),
+					//---------- 너무 힘드렁 ㅋㅋ
+			};
+		}
+		else if(titleName.equals("Route - 209 8bit") && difficulty.equals("Hard")) {
+			int startTime = 1000;
+			beats = new Beat[] {
+					new Beat(startTime, "Space"),
+					//---------- 너무 힘드렁 ㅋㅋ
+			};
+		}
+		else if(titleName.equals("Ending - 209 8bit") && difficulty.equals("Easy")) {
+			int startTime = 1000;
+			beats = new Beat[] {
+					new Beat(startTime, "Space"),
+					//---------- 너무 힘드렁 ㅋㅋ
+			};
+		}
+		else if(titleName.equals("Route - 209 8bit") && difficulty.equals("Hard")) {
+			int startTime = 1000;
+			beats = new Beat[] {
+					new Beat(startTime, "Space"),
+					//---------- 너무 힘드렁 ㅋㅋ
 			};
 		}
 			
@@ -255,9 +382,19 @@ public class Game extends Thread {
 			if(!dropped) {
 				try {
 					Thread.sleep(5);
-				}catch(Exception e) {
-					e.printStackTrace();
+				}catch(InterruptedException e) {
+					//e.printStackTrace();
 				}
+			}
+		}
+	}
+	
+	public void judge(String input) { //노트 판정 함수
+		for(int i=0; i<noteList.size(); i++) {
+			Note note = noteList.get(i);
+			if(input.equals(note.getNoteType())) {
+				note.judge();
+				break;
 			}
 		}
 	}

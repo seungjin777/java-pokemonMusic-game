@@ -9,6 +9,19 @@ public class Note extends Thread{
 	private Image noteBasicImage = new ImageIcon(Main.class.getResource("../images/noteBasic.png")).getImage(); //노트 이미지
 	private int x, y = 580 - (1000 / Main.SLEEP_TIME * Main.NOTE_SPEED) * Main.REACH_TIME;
 	private String noteType;
+	private boolean proceeded = true; //현재 노트의 진행 여부
+	
+	public String getNoteType() {
+		return noteType;
+	}
+	
+	public boolean isProceeded() {
+		return proceeded;
+	}
+	
+	public void close() { //노트가 움직이지 않게
+		proceeded = false;
+	}
 	
 	public Note(String noteType) {
 		if(noteType.equals("S")) {
@@ -50,6 +63,10 @@ public class Note extends Thread{
 	
 	public void drop() {
 		y += Main.NOTE_SPEED;
+		if(y > 620) { //노트가 판정바를 벗어남
+			System.out.println("Miss");
+			close();
+		}
 	}
 	
 	@Override
@@ -57,10 +74,47 @@ public class Note extends Thread{
 		try {
 			while(true) {
 				drop();
-				Thread.sleep(Main.SLEEP_TIME);
+				if(proceeded) {
+					Thread.sleep(Main.SLEEP_TIME);
+				}
+				else {
+					interrupt();
+					break;
+				}
 			}
 		}catch(Exception e) {
 			System.err.println(e.getMessage());
+		}
+	}
+	
+	public void judge() { //노트 판정 함수
+		if(y >= 613) {
+			System.out.println("Late");
+			close();
+		}
+		else if(y >= 600) {
+			System.out.println("Good");
+			close();
+		}
+		else if(y >= 587) {
+			System.out.println("Great");
+			close();
+		}
+		else if(y >= 573) {
+			System.out.println("Perfect");
+			close();
+		}
+		else if(y >= 565) {
+			System.out.println("Great");
+			close();
+		}
+		else if(y >= 550) {
+			System.out.println("Good");
+			close();
+		}
+		else if(y >= 535) {
+			System.out.println("Early");
+			close();
 		}
 	}
 }
